@@ -1,0 +1,52 @@
+@startuml
+left to right direction
+
+rectangle "Информационная система поликлиники" {
+  usecase "Регистрация пациента" as UC1
+  usecase "Запись на прием" as UC2
+  usecase "Назначение диагноза" as UC3
+  usecase "Лечение и наблюдение" as UC4
+  usecase "Формирование отчетов" as UC5
+}
+
+actor "Пациент" as Patient
+actor "Врач" as Doctor
+actor "Медицинская сестра" as Nurse
+
+UC1 --> UC2 : <include>
+UC1 --> UC3 : <include>
+UC2 --> UC4 : <include>
+UC5 --> UC4 : <include>
+
+Patient --> UC1 : Регистрируется
+Patient --> UC2 : Записывается
+Doctor --> UC2 : Назначает
+Doctor --> UC3 : Ставит
+Doctor --> UC4 : Осуществляет
+Nurse --> UC4 : Осуществляет
+Nurse --> UC5 : Формирует
+
+usecase "Диагнозы" as Diagnoses
+UC3 ..> Diagnoses
+usecase "История болезни" as MedicalRecords
+UC4 ..> MedicalRecords
+
+Diagnoses -- Doctors
+MedicalRecords -- Doctors
+MedicalRecords -- Patients
+MedicalRecords -- Diagnoses
+
+entity "Сущность \"Врачи\"" as Entity_Doctors
+entity "Сущность \"Пациенты\"" as Entity_Patients
+entity "Сущность \"Диагнозы\"" as Entity_Diagnoses
+entity "Сущность \"История болезни\"" as Entity_MedicalRecords
+entity "Сущность \"Отделения\"" as Entity_Departments
+
+Entity_Departments -- Entity_Doctors
+Entity_Doctors -- Entity_Patients
+Entity_MedicalRecords -- Entity_Patients
+Entity_MedicalRecords -- Entity_Doctors
+Entity_MedicalRecords -- Entity_Diagnoses
+}
+
+@enduml

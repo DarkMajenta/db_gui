@@ -1,0 +1,70 @@
+Диаграмма развёртывания:
+@startuml
+!define WEB
+!define DATABASE
+!define SERVER
+
+node "Web-сервер" as webServer <<WEB>> {
+  node "Поликлиника" as mainApp {
+    [Формы и интерфейс]
+    [ВрачController]
+    [ПациентController]
+    [ИсторияБолезниController]
+    [ОтделениеController]
+  }
+}
+
+node "База данных" as database <<DATABASE>> {
+  [ВрачDAO]
+  [ПациентDAO]
+  [ИсторияБолезниDAO]
+  [ОтделениеDAO]
+}
+
+webServer --> database : Database Connection
+@enduml
+
+Диаграмма компонентов:
+@startuml
+!define ENTITY
+!define DAO
+!define SERVICE
+!define CONTROLLER
+!define UI
+!define EXTERNAL
+
+package "Информационная система поликлиники" {
+  component "Поликлиника" as mainApp {
+    component "Интерфейс" as uiFrontend <<UI>> {
+      [Формы и интерфейс]
+    }
+    component "Контроллеры" as controllers <<CONTROLLER>> {
+      [ВрачController]
+      [ПациентController]
+      [ИсторияБолезниController]
+      [ОтделениеController]
+    }
+    component "Сервисы" as services <<SERVICE>> {
+      [ВрачService]
+      [ПациентService]
+      [ИсторияБолезниService]
+      [ОтделениеService]
+    }
+    component "БазаДанных" as dao <<DAO>> {
+      [ВрачDAO]
+      [ПациентDAO]
+      [ИсторияБолезниDAO]
+      [ОтделениеDAO]
+    }
+    component "Внешние системы" as externalSystems <<EXTERNAL>> {
+      [База данных]
+    }
+  }
+
+  uiFrontend --> controllers
+  controllers --> services
+  services --> dao
+  dao --> externalSystems
+}
+
+@enduml
